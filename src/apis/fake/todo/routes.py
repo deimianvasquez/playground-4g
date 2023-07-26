@@ -1,6 +1,6 @@
 import os, json
 from .models import Todo
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template
 
 
 todo = Blueprint('todo', __name__)
@@ -11,7 +11,7 @@ todo_file_path = os.path.join(os.path.dirname(__file__), 'todos.json')
 @todo.route('/', methods=['GET'])
 def handle_index():
     if request.method == 'GET':
-        return "Aquí va la documentación de la api de todo list"
+        return render_template('todo.html')
 
 
 @todo.route('/user', methods=['GET'])

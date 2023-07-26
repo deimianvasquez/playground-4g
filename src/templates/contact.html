@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+      <div class="row">
+        <div class="col-12 container__col-todo">
+          <h1>Fake Contact-List API</h1>
+          <hr/>
+          <p>⚠️ The use of
+            <a href="(https://www.getpostman.com/downloads" target="_blank">Postman</a> or
+            <a href="https://insomnia.rest" target="_blank">Insomnia (recomended)</a>
+            is strongly recomended for testing the API.
+
+          </p>
+
+          <br/>
+          <h2>1. Get All available agendas right now</h2>
+          <pre>
+            <code>
+              GET: /apis/fake/contact/agenda
+            </code>
+          </pre>
+          <br/>
+
+          <h2>2. Create an agenda</h2>
+          <p>
+            To create an agenda all you have to do is create a contact with a unused agenda_slug and the agenda will automatically be created.
+          </p>
+          <br/>
+
+          <h2>3. Get All contacts from an Agenda</h2>
+          <pre>
+            <code>
+              GET: /apis/fake/contact/agenda/{agenda_slug}
+            </code>
+          </pre>
+          <br/>
+
+          <h2>4. Get One Particular Contact</h2>
+          <pre>
+            <code>
+              GET: /apis/fake/contact/{contact_id}
+            </code>
+          </pre>
+          <br/>
+
+          <h2>5. Delete One Particular Contact</h2>
+          <pre>
+            <code>
+              DELETE: /apis/fake/contact/{contact_id}
+            </code>
+          </pre>
+          <br/>
+
+          <h2>6. Delete All Contacts from an Agenda</h2>
+          <pre>
+            <code>
+              DELETE: /apis/fake/contact/agenda/{agenda_slug}
+            </code>
+          </pre>
+          <br/>
+
+          <h2>7. Create one contact</h2>
+          <pre>
+            <code>
+              POST: /apis/fake/contact/
+
+              Request (application/json)
+
+                  body:
+                  {
+                      "full_name": "Dave Bradley",
+                      "email": "dave@gmail.com",
+                      "agenda_slug": "my_super_agenda",
+                      "address":"47568 NW 34ST, 33434 FL, USA",
+                      "phone":"7864445566"
+                  }
+             </code>
+          </pre>
+          <br/>
+
+          <h2>8. Update one contact</h2>
+          <pre>
+            <code>
+              PUT: /apis/fake/contact/{contact_id}
+
+                  Request (application/json)
+
+                      body:
+                      {
+                          "full_name": "Dave Bradley",
+                          "email": "dave@gmail.com",
+                          "agenda_slug": "my_super_agenda",
+                          "address":"47568 NW 34ST, 33434 FL, USA",
+                          "phone":"7864445566"
+                      }
+              </code>
+          </pre>
+
+        </div>
+      </div>
+    </div>
+{% endblock %}
