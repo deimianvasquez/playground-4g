@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, jsonify, request, url_for
+from flask import Blueprint, jsonify, request, url_for, render_template
 from .models import Contact
 
 contact = Blueprint('contacts', __name__)
@@ -7,7 +7,7 @@ contact_file_path = os.path.join(os.path.dirname(__file__), 'contact.json')
 
 @contact.route('/', methods=['GET'])
 def welcome_contact():
-    return 'Documentation of the API de contact list'
+    return render_template('contact.html')
 
 
 @contact.route('/agenda/<string:id_agenda>', methods=['GET'])

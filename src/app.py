@@ -3,8 +3,8 @@ from flask import Flask, url_for, render_template
 from flask_cors import CORS
 from flask_bootstrap import Bootstrap
 
-from todo.routes import todo
-from contacts.routes import contact
+from apis.fake.todo.routes import todo
+from apis.fake.contacts.routes import contact
 
 app = Flask(__name__)
 CORS(app)
