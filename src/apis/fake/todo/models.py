@@ -58,27 +58,14 @@ class Todo():
     def create_user(todo_file_path, username=None):
         with open(todo_file_path, 'r') as file:
             todos = json.load(file)
-
-            if len(todos) == 0:
-                with open(todo_file_path, 'w') as file:
-                    todos.append({"username": username, "todo": [
-                        {"id": 1, "label": "task 1", "done": False},
-                    ]})
-                    json.dump(todos, file, indent=2)
-                    file.close()
-                    return True
-
-            for todo in todos:
-                if todo.get("username") == username:
-                    return False
-                else:
-                    with open(todo_file_path, 'w') as file:
-                        todos.append({"username": username, "todo": [
-                            {"id": 1, "label": "example task", "done": False},
-                        ]})
-                        json.dump(todos, file, indent=2)
-                        file.close()
-                    return True
+            with open(todo_file_path, 'w') as file:
+                todos.append({"username": username, "todo": [
+                    {"id": 1, "label": "example task", "done": False},
+                ]})
+                json.dump(todos, file, indent=2)
+                file.close()
+                return True
+       
 
     def delete_user(todo_file_path, username=None):
         with open(todo_file_path, 'r') as file:
