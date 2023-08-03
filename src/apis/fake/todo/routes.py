@@ -71,18 +71,22 @@ def update_task(username=None):
 
 @todo.route('/user/<string:username>', methods=['POST'])
 def create_user(username=None):
-    print(request.method)
+    Todo.create_json_file(todo_file_path)
     try:
         data = request.json
     except Exception as error:
         return jsonify({"message": "You must add an empty array in the body of the request"}), 400
 
     if type(data) == list and len(data) == 0:
-        user = Todo.create_user(todo_file_path, username)
-        if user is True:
-            return jsonify({"msg": f"The user {username} has been created successfully"}), 201
-        else:
+        users = Todo.get_all_users(todo_file_path)
+        if username in users:
             return jsonify({"msg": "The user exist"}), 400
+        else:
+            user = Todo.create_user(todo_file_path, username)
+            if user is True:
+                return jsonify({"msg": f"The user {username} has been created successfully"}), 201
+            else:
+                return jsonify({"msg": "Internal server error"}), 500  
     else:
         return jsonify({"msg": "You must send an empty array in the body of the request"}), 400
 
