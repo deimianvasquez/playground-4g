@@ -8,15 +8,5 @@
         "done": false
       }
     ]
-  },
-  {
-    "username": "deimian",
-    "todo": [
-      {
-        "id": 1,
-        "label": "example task",
-        "done": false
-      }
-    ]
   }
 ]
