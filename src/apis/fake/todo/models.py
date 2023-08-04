@@ -76,10 +76,7 @@ class Todo():
                     with open(todo_file_path, 'w') as file:
                         json.dump(todos, file, indent=2)
                         file.close()
-                    return True
-                else:
-                    print("usuario no existe")
-                    return False
-       
+                        return True
+            return None
 
      

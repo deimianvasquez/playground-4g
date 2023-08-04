@@ -97,9 +97,13 @@ def delete_task(username=None):
     if username is None:
         return jsonify({"msg": "You must include a username in the URL of the request"}), 400
 
-    user_delete = Todo.delete_user(todo_file_path, username)
-    if user_delete is True:
-        return jsonify({"msg": f"The user {username} has been deleted successfully"}), 200
-    else:
+    users = Todo.get_all_users(todo_file_path)
+    if username not in users:
         return jsonify({"msg": f"The user {username} doesn't exist"}), 404
+    else:
+        user_delete = Todo.delete_user(todo_file_path, username)
+        if user_delete is None:
+            return jsonify({"msg": "Internal server error"}), 500
+        return jsonify({"msg": f"The user {username} has been deleted successfully"}), 201
+      
     
