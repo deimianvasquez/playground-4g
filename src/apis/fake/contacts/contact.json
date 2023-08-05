@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "id": 1,
+    "full_name": "Dave Bradley",
+    "email": "dave@gmail.com",
+    "agenda_slug": "deimian",
+    "address": "47568 NW 34ST, 33434 FL, USA",
+    "phone": "7864445566"
+  }
+]
