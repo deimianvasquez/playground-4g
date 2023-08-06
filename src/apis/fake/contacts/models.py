@@ -13,7 +13,7 @@ class Contact():
     def __str__(self):
         return f'{self.full_name} {self.email} {self.agenda_slug} {self.address} {self.phone} {self.id}'
 
-    def to_json(self):
+    def serialize(self):
         return {
             'full_name': self.full_name,
             'email': self.email,
@@ -22,6 +22,7 @@ class Contact():
             'phone': self.phone,
             'id': self.id
         }
+
 
     def create_json_file(contact_file_path):
         try:
@@ -47,24 +48,9 @@ class Contact():
         else:
             return None
     
-    # def __generate_id():
-    #     return randint(0, 100000000000)
 
-    # def create_json_file(contact_file_path):
-    #     try:
-    #         file = open(contact_file_path)
-    #         file.close()
-    #         return True
 
-    #     except Exception as error:
-    #         if error.errno == 2:
-    #             with open(contact_file_path, 'w') as file:
-    #                 json.dump([], file, indent=2)
-    #                 file.close()
-    #                 return True
-    #         else:
-    #             return None
-
+   
 
     # def get_all_contacts_for_user(contact_file_path, agenda_slug):
     #     if Contact.create_json_file(contact_file_path):
@@ -75,36 +61,30 @@ class Contact():
     #     else:
     #         return None
         
-    # def get_all_contacts(contact_file_path):
-    #     if Contact.create_json_file(contact_file_path):
-    #         with open(contact_file_path, 'r') as file:
-    #             contacts = json.load(file)
-    #             file.close()
-    #             return contacts
-    #     else:
-    #         return None
+    def get_all_contacts(contact_file_path):
+        if Contact.create_json_file(contact_file_path):
+            with open(contact_file_path, 'r') as file:
+                contacts = json.load(file)
+                file.close()
+                return contacts
+        else:
+            return None
 
-
-    # def create_contact(contact_file_path, data=None):
-    #     data.update({'id': Contact.__generate_id()})
-
-    #     #verificar si la agenda existe
-    #     if Contact.create_json_file(contact_file_path):
-    #         with open(contact_file_path, 'r') as file:
-    #             contacts = json.load(file)
-    #             if data is None:
-    #                 # retorno un error 
-    #                 return None
-    #             else:
-    #                 contacts.append(data)
-    #                 file.close()
-    #                 with open(contact_file_path, 'w') as file:
-    #                     json.dump(contacts, file, indent=2)
-    #                     file.close()
-    #                     return True
-    #     else:
-    #         return None
+    @classmethod
+    def create_contact(cls,contact_file_path, data):
+        data = cls(**data)
+        with open(contact_file_path, 'r') as file:
+            contacts = json.load(file)
+            contacts.append(data.serialize())
+            file.close()
+            with open(contact_file_path, 'w') as file:
+                json.dump(contacts, file, indent=2)
+                file.close()
+                return True
+        
     
+    def delete_contact(contact_file_path, data=None):
+        print(id_contact)
     # def delete_contact(contact_file_path, id_contact=None):
     #     if Contact.create_json_file(contact_file_path):
     #         with open(contact_file_path, 'r') as file:
@@ -132,21 +112,20 @@ class Contact():
     #     else:   
     #         return None
         
-    # def update_contact(contact_file_path, id_contact=None, data=None):
-    #     if Contact.create_json_file(contact_file_path):
-    #         with open(contact_file_path, 'r') as file:
-    #             contacts = json.load(file)
-    #             for contact in contacts:
-    #                 if contact['id'] == id_contact:
-    #                     contacts.remove(contact)
-    #                     data.update({'id': id_contact})
-    #                     contacts.append(data)
-    #                     with open(contact_file_path, 'w') as file:
-    #                         json.dump(contacts, file, indent=2)
-    #                         file.close()
-    #                         return True
-    #     else:
-    #         return None
+    def update_contact(contact_file_path, id_contact=None, data=None):
+       
+        with open(contact_file_path, 'r') as file:
+            contacts = json.load(file)
+            for contact in contacts:
+                print(type(contact['id']), type(id_contact))
+                if contact['id'] == id_contact:
+                    contacts.remove(contact)
+                    contacts.append(data)
+                    with open(contact_file_path, 'w') as file:
+                        json.dump(contacts, file, indent=2)
+                        file.close()
+                        return True
+        return None
 
 
 # # ![alt text](/apis/img/images.php?blob&random&cat=icon&tags=breathecode,32) Fake Contact-List API
