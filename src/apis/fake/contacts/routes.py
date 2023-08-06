@@ -9,8 +9,24 @@ contact_file_path = os.path.join(os.path.dirname(__file__), 'contact.json')
 def welcome_contact():
     return render_template('contact.html')
 
+
+@contact.route('/agenda', methods=['GET'])
+def get_all_agendas():
+    if request.method == 'GET':
+        all_agendas = Contact.get_all_contacts(contact_file_path)
+        if all_agendas is None:
+            return jsonify({"msg": "Internal server error"}), 500
+        
+        agendas = []
+        for agenda in all_agendas:
+            agendas.append(agenda['agenda_slug'])
+        agendas = list(set(agendas))
+        return jsonify(agendas), 200
+    return jsonify({"msg": "Method not allowed"}), 405
+
+
 @contact.route('/agenda/<string:id_agenda>', methods=['GET'])
-def get_all_agendas(id_agenda=None):
+def get_all_contacts(id_agenda=None):
     if request.method == 'GET':
         if id_agenda is None:
             return jsonify({"msg": "You must send a agenda_slug"}), 400
@@ -60,39 +76,25 @@ def delete_one_contact(id_contact=None):
         if len(respuesta) == 0:
             return jsonify({"msg": "Contact not found"}), 404
         
-        result = Contact.delete_contact(contact_file_path, respuesta[0])
+        result = Contact.delete_contact(contact_file_path, respuesta[0]['id'])
         
-       
-        print(result)
-        return jsonify({"msg": "probando"}), 201
+        if result is None:
+            return jsonify({"msg": "Internal server error"}), 500
 
-# @contact.route('/<int:id_contact>', methods=['DELETE'])
-# def delete_one_contact(id_contact=None):
-#     if request.method == "DELETE":
-#         if id_contact is None:
-#             return jsonify({"msg": "You must send a contact_id"}), 400
-        
-#         result = Contact.delete_contact(contact_file_path, id_contact)
-#         print(result)
-#         if result is None:
-#             return jsonify({"msg": "User not found"}), 404
-        
-#         if result:
-#             return jsonify({"msg": "Contact deleted successfully"}), 204
-#     return jsonify({"msg": "Method not allowed"}), 405
+        if result:
+            return jsonify({"msg": "Contact deleted successfully"}), 201
 
+    
+@contact.route('/agenda/<string:id_agenda>', methods=['DELETE'])
+def delete_all_contacts(id_agenda=None):
+    if request.method == "DELETE":
+        result = Contact.delete_all_contacts(contact_file_path, id_agenda)
+        if result is None:
+            return jsonify({"msg": "Internal server error"}), 500
 
-
-# @contact.route('/agenda/<string:id_agenda>', methods=['DELETE'])
-# def delete_all_contacts(id_agenda=None):
-#     if request.method == "DELETE":
-#         result = Contact.delete_all_contacts(contact_file_path, id_agenda)
-#         if result is None:
-#             return jsonify({"msg": "Internal server error"}), 500
-
-#         if result:
-#             return jsonify({"msg": "Contacts deleted successfully"}), 204
-#     return jsonify({"msg": "Method not allowed"}), 405
+        if result:
+            return jsonify({"msg": "Contacts deleted successfully"}), 204
+    return jsonify({"msg": "Method not allowed"}), 405
         
 
 @contact.route('/', methods=['POST'])
