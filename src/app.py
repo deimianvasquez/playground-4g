@@ -9,6 +9,7 @@ from apis.fake.contacts.routes import contact
 app = Flask(__name__)
 CORS(app)
 bootstrap = Bootstrap(app)
+app.url_map.strict_slashes = False
 
 app.register_blueprint(todo, url_prefix='/apis/fake/todos')
 app.register_blueprint(contact, url_prefix='/apis/fake/contact')
