@@ -10,46 +10,56 @@ def welcome_contact():
     return render_template('contact.html')
 
 
+@contact.route('/agenda', methods=['GET'])
+def get_all_agendas():
+    if request.method == 'GET':
+        all_agendas = Contact.get_all_contacts(contact_file_path)
+        if all_agendas is None:
+            return jsonify({"msg": "Internal server error"}), 500
+        
+        agendas = []
+        for agenda in all_agendas:
+            agendas.append(agenda['agenda_slug'])
+        agendas = list(set(agendas))
+        return jsonify(agendas), 200
+    return jsonify({"msg": "Method not allowed"}), 405
+
+
 @contact.route('/agenda/<string:id_agenda>', methods=['GET'])
-def get_all_agendas(id_agenda=None):
+def get_all_contacts(id_agenda=None):
     if request.method == 'GET':
         if id_agenda is None:
             return jsonify({"msg": "You must send a agenda_slug"}), 400
         
-        all_agendas = Contact.get_all_contacts_for_user(contact_file_path, id_agenda)
+        all_agendas = Contact.get_contacts_slug(contact_file_path, id_agenda)
         contacts = []
         for agenda in all_agendas:
             if agenda['agenda_slug'] == id_agenda:
                 contacts.append(agenda)
         if all_agendas is None:
             return jsonify({"msg": "Internal server error"}), 500
-        
+
         return jsonify(contacts), 200
     return jsonify({"msg": "Method not allowed"}), 405
-
 
 
 @contact.route('/<int:id_contact>', methods=['GET'])
 def get_one_contact(id_contact=None):
     if request.method == 'GET':
-        if id_contact is None:
+        if id_contact is None or type(id_contact) != int:
             return jsonify({"msg": "You must send a contact_id"}), 400
-        
-        contacts = []
+
         all_contacts = Contact.get_all_contacts(contact_file_path)
-        for contact in all_contacts:
-            if contact['id'] == id_contact:
-                contacts.append(contact)
-                break
-            else:
-                return jsonify({"msg": "Contact not found"}), 404
-            
         if all_contacts is None:
             return jsonify({"msg": "Internal server error"}), 500
         
-        return jsonify(contacts), 200
+        respuesta = list(filter(lambda contact: contact['id'] == id_contact, all_contacts))
+        if len(respuesta) == 0:
+            return jsonify({"msg": "Contact not found"}), 404
+        
+        return jsonify(respuesta), 200
+        print(respuesta)
     return jsonify({"msg": "Method not allowed"}), 405
-
 
 
 @contact.route('/<int:id_contact>', methods=['DELETE'])
@@ -57,18 +67,24 @@ def delete_one_contact(id_contact=None):
     if request.method == "DELETE":
         if id_contact is None:
             return jsonify({"msg": "You must send a contact_id"}), 400
-        
-        result = Contact.delete_contact(contact_file_path, id_contact)
-        print(result)
+
+        result = Contact.get_all_contacts(contact_file_path)
         if result is None:
-            return jsonify({"msg": "User not found"}), 404
+            return jsonify({"msg": "Internal server error"}), 500
         
+        respuesta = list(filter(lambda contact: contact['id'] == id_contact, result))
+        if len(respuesta) == 0:
+            return jsonify({"msg": "Contact not found"}), 404
+        
+        result = Contact.delete_contact(contact_file_path, respuesta[0]['id'])
+        
+        if result is None:
+            return jsonify({"msg": "Internal server error"}), 500
+
         if result:
-            return jsonify({"msg": "Contact deleted successfully"}), 204
-    return jsonify({"msg": "Method not allowed"}), 405
+            return jsonify({"msg": "Contact deleted successfully"}), 201
 
-
-
+    
 @contact.route('/agenda/<string:id_agenda>', methods=['DELETE'])
 def delete_all_contacts(id_agenda=None):
     if request.method == "DELETE":
@@ -85,44 +101,56 @@ def delete_all_contacts(id_agenda=None):
 def create_one_contact():
     if request.method == "POST":
         Contact.create_json_file(contact_file_path)
-
         data = request.json
+
         if data is None:
             return jsonify({"msg": "You must send a json"}), 400
         
         new_contact = Contact.create_contact(contact_file_path, data)
-
         if new_contact is None:
             return jsonify({"msg": "Internal server error"}), 500
         
-        if new_contact is True:
+        if new_contact:
             return jsonify({"msg": "Contact created successfully"}), 201
-        
-        return jsonify({"msg": "You must send a json"}), 400
-    
     return jsonify({"msg": "Method not allowed"}), 405
 
 
 @contact.route('/<int:id_contact>', methods=['PUT'])
 def update_one_contact(id_contact=None):
     if request.method == "PUT":
-        if id_contact is None:
-            return jsonify({"msg": "You must send a contact_id"}), 400
-        
         data = request.json
         if data is None:
             return jsonify({"msg": "You must send a json"}), 400
         
-        result = Contact.update_contact(contact_file_path, id_contact, data)
-        
+        if id_contact is None:
+            return jsonify({"msg": "You must send a contact_id"}), 400
+
+        if data.get('full_name') is None:
+            return jsonify({"msg": "You must send a full_name"}), 400
+        if data.get('email') is None:
+            return jsonify({"msg": "You must send a email"}), 400
+        if data.get('agenda_slug') is None:
+            return jsonify({"msg": "You must send a agenda_slug"}), 400
+        if data.get('address') is None:
+            return jsonify({"msg": "You must send a address"}), 400
+        if data.get('phone') is None:
+            return jsonify({"msg": "You must send a phone"}), 400
+
+        data = {
+            'full_name': data.get('full_name'),
+            'email': data.get('email'),
+            'agenda_slug': data.get('agenda_slug'),
+            'address': data.get('address'),
+            'phone': data.get('phone'),
+            'id': id_contact
+        }
+        result = Contact.update_contact(contact_file_path,   int(id_contact), data)
+
         if result is None:
             return jsonify({"msg": "Internal server error"}), 500
         
         if result is True:
-            return jsonify({"msg": "Contact updated successfully"}), 204
-        
+            return jsonify({"msg": "Contact updated successfully"}), 201
+
         return jsonify({"msg": "Contact not found"}), 404
-    
     return jsonify({"msg": "Method not allowed"}), 405
-
-
