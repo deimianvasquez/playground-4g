@@ -5,6 +5,7 @@ from flask_bootstrap import Bootstrap
 
 from apis.fake.todo.routes import todo
 from apis.fake.contacts.routes import contact
+from apis.fake.sound.routes import sound
 
 app = Flask(__name__)
 CORS(app)
@@ -13,6 +14,7 @@ app.url_map.strict_slashes = False
 
 app.register_blueprint(todo, url_prefix='/apis/fake/todos')
 app.register_blueprint(contact, url_prefix='/apis/fake/contact')
+app.register_blueprint(sound, url_prefix='/apis/fake/sound')
 
 
 @app.route('/')

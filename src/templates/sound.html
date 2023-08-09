@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+      <div class="row">
+        <div class="col-12 container__col-todo">
+          <h1>Fake Sound API</h1>
+          <hr/>
+          <p>⚠️ The use of
+            <a href="(https://www.getpostman.com/downloads" target="_blank">Postman</a> or
+            <a href="https://insomnia.rest" target="_blank">Insomnia (recomended)</a>
+            is strongly recomended for testing the API.
+
+          </p>
+
+          <br/>
+          <h2>1. Get All Sound</h2>
+          <pre>
+            <code>
+              GET: /apis/fake/sound/all
+
+              {
+                fx: [],
+                songs: []
+              }
+            </code>
+          </pre>
+          <br/>
+
+         
+
+         <h2>2. Get All Song FX</h2>
+          <pre>
+            <code>
+              GET: /apis/fake/sound/fx
+
+              [
+                {
+                    id: 1,
+                    category: "game",
+                    name: "Game Over",
+                    url: "files/mario/fx_gameover.wav"
+                },
+                {
+                    id: 2,
+                    category: "game",
+                    name: "Jump Super",
+                    url: "files/mario/fx_jump_super.wav"
+                }
+              ]
+            </code>
+          </pre>
+          <br/>
+
+          <h2>3. Get All Songs</h2>
+          <pre>
+            <code>
+              GET: /apis/fake/sound/songs
+
+              [
+                { 
+                  "id":1, "category":"game", 
+                  "name":"Mario Castle", 
+                  "url":"files/mario/songs/castle.mp3" 
+                },
+                {
+                  "id":2, 
+                  "category":"game", 
+                  "name":"Mario Star", 
+                  "url":"files/mario/songs/hurry-starman.mp3"
+                },
+              ]
+            </code>
+          </pre>
+          <br/>
+
+          <h2>Here is an example of a song hosted on our servers:</h2>
+          <hr/>
+          <a href="https://playground.4geeks.com/apis/fake/sound/files/mario/songs/castle.mp3">https://playground.4geeks.com/apis/fake/sound/files/mario/songs/castle.mp3</a>
+          <p>
+            You can see that all songs URL's start with <code>https://playground.4geeks.com/apis/fake/sound/</code> and then are concatenated with the song path like this:
+          </p>
+
+          <p>
+            <code>const</code> songURL = <code>"https://assets.breatheco.de/apis/sound/"</code> + <code>"files/mario/songs/castle.mp3"</code>;
+          </p>
+          
+
+        </div>
+      </div>
+    </div>
+{% endblock %}

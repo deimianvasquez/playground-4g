@@ -1,0 +1,14 @@
+services:
+    - type: web
+      region: ohio
+      name: fake-apis
+      env: python
+      buildCommand: "./render_build.sh"
+      startCommand: "gunicorn wsgi --chdir ./src/"
+      plan: free
+
+      envVars:
+          - key: FLASK_APP
+            value: src/app.py
+          - key: PYTHON_VERSION
+            value: 3.10.6

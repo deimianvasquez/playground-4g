@@ -48,17 +48,7 @@ class Contact():
         else:
             return None
     
-
-
-    # def get_all_contacts_for_user(contact_file_path, agenda_slug):
-    #     if Contact.create_json_file(contact_file_path):
-    #         with open(contact_file_path, 'r') as file:
-    #             contacts = json.load(file)
-    #             file.close()
-    #             return contacts
-    #     else:
-    #         return None
-        
+ 
     def get_all_contacts(contact_file_path):
         if Contact.create_json_file(contact_file_path):
             with open(contact_file_path, 'r') as file:
