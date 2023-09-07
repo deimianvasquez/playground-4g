@@ -60,3 +60,26 @@ class KillTheBug():
                     return data.serialize()
         else:
             return None
+        
+    def get_levels(kill_the_bug_file_path):
+        if KillTheBug.create_json_file(kill_the_bug_file_path):
+            with open(kill_the_bug_file_path, 'r') as file:
+                attempts = json.load(file)
+                file.close()
+                return attempts
+        else:
+            return None
+        
+    def get_pending_attempts(kill_the_bug_file_path, level_id):
+        if KillTheBug.create_json_file(kill_the_bug_file_path):
+            with open(kill_the_bug_file_path, 'r') as file:
+                attempts = json.load(file)
+                file.close()
+                pending_attempts = attempts.get('data').get('pending_attempts')
+                result = []
+                for attempt in pending_attempts:
+                    if attempt.get('level') == level_id:
+                        result.append(attempt)
+                return result
+        else:
+            return None
