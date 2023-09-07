@@ -1,0 +1,23 @@
+{
+    "data": [
+      {
+        "slug": "1",
+        "difficulty": "easy",
+        "thumb": "img/levels/1.png",
+        "title": "Map 1"
+      },
+      {
+        "slug": "2",
+        "difficulty": "easy",
+        "thumb": "img/levels/2.png",
+        "title": "Map 2"
+      },
+      {
+        "slug": "3",
+        "difficulty": "easy",
+        "thumb": "img/levels/3.png",
+        "title": "Map 3"
+      }
+    ],
+    "code": 200
+  }
