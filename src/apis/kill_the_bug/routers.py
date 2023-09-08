@@ -18,10 +18,27 @@ def get_pending_attempts(level_id=None):
                 "pending_attempts": reult
             },
             "code": 200
-
         }
-        print(response)
         return jsonify(response),200
+    
+
+@kill_the_bug.route('/get_levels', methods=['GET'])
+def get_levels():
+    if request.method == 'GET':
+        result = KillTheBug.get_levels(kill_the_bug_levels_file_path)
+        if result is not None:
+            return jsonify(result), 200
+        
+        else:
+            return jsonify({"msg": "Internal server error"}), 500
+        
+    return jsonify({"msg": "get_levels"}), 200
+
+
+@kill_the_bug.route('/get_level/<int:level_id>', methods=['GET'])
+def get_level(level_id=None):
+    if request.method == "GET":
+        pass
 
 
 @kill_the_bug.route('/add_attempt', methods=['POST'])
@@ -48,15 +65,23 @@ def add_attempt():
         else:
             return jsonify({"msg": "Internal server error"}), 500
 
-      
-@kill_the_bug.route('/get_levels', methods=['GET'])
-def get_levels():
-    if request.method == 'GET':
-        result = KillTheBug.get_levels(kill_the_bug_levels_file_path)
-        if result is not None:
-            return jsonify(result), 200
+
+@kill_the_bug.route('/delete_attempt', methods=['POST'])
+def delete_attempt():
+    if request.method == 'POST':
+        data = json.loads(request.data.decode('utf-8'))
         
+
+        if data is None:
+            return jsonify({"msg": "You must send a data"}), 400
+        
+        result = KillTheBug.delete_attempt(kill_the_bug_file_path, data.get('id'))
+        
+        if result is not None:
+            return {
+                "data":"ok",
+                "code": 200
+            }, 200
+
         else:
             return jsonify({"msg": "Internal server error"}), 500
-        
-    return jsonify({"msg": "get_levels"}), 200
