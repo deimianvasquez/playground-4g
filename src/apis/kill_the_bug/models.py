@@ -4,7 +4,7 @@ from datetime import datetime
 
 class KillTheBug():
     def __init__(self, username, character, level, commands):
-        self.id = randint(0, 100000000000)
+        self.id = str(randint(0, 100000000000))
         self.username = username
         self.character = character
         self.level = level
@@ -47,8 +47,6 @@ class KillTheBug():
     def add_attempt(cls, kill_the_bug_file_path, data):
         data = cls(**data)
         
-        print(data.serialize())
-        
         if KillTheBug.create_json_file(kill_the_bug_file_path):
             with open(kill_the_bug_file_path, 'r') as file:
                 attempts = json.load(file)
@@ -81,5 +79,22 @@ class KillTheBug():
                     if attempt.get('level') == level_id:
                         result.append(attempt)
                 return result
+        else:
+            return None
+    
+
+    def delete_attempt(kill_the_bug_file_path, user_id):
+        if KillTheBug.create_json_file(kill_the_bug_file_path):
+            with open(kill_the_bug_file_path, 'r') as file:
+                attempts = json.load(file)
+                file.close()
+                pending_attempts = attempts.get('data').get('pending_attempts')
+                result = list(filter(lambda attempt: attempt.get('id') != user_id, pending_attempts))
+                attempts['data']['pending_attempts'] = result
+                with open(kill_the_bug_file_path, 'w') as file:
+                    json.dump(attempts, file, indent=2)
+                    file.close()
+                    return True
+                
         else:
             return None
