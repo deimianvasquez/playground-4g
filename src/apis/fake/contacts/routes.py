@@ -53,11 +53,11 @@ def get_one_contact(id_contact=None):
         if all_contacts is None:
             return jsonify({"msg": "Internal server error"}), 500
         
-        respuesta = list(filter(lambda contact: contact['id'] == id_contact, all_contacts))
-        if len(respuesta) == 0:
+        contact = next((contact for contact in all_contacts if contact['id'] == id_contact), None)
+        if contact is None:
             return jsonify({"msg": "Contact not found"}), 404
         
-        return jsonify(respuesta), 200
+        return jsonify(contact), 200
     return jsonify({"msg": "Method not allowed"}), 405
 
 
