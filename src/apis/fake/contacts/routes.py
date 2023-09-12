@@ -58,7 +58,6 @@ def get_one_contact(id_contact=None):
             return jsonify({"msg": "Contact not found"}), 404
         
         return jsonify(respuesta), 200
-        print(respuesta)
     return jsonify({"msg": "Method not allowed"}), 405
 
 
