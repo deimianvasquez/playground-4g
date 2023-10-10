@@ -1,12 +1,1 @@
-[
-  {
-    "username": "deimian1",
-    "todo": [
-      {
-        "id": 1,
-        "label": "example task",
-        "done": false
-      }
-    ]
-  }
-]
+[]
