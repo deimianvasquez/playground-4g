@@ -59,6 +59,7 @@ def update_task(username=None):
 
         if len(data) >= 1:
             for task in data:
+                task.pop("id", None)
                 if type(task) != dict:
                     return jsonify({"msg": "You must send an array of objects in the body of the request"}), 400
                 if set(("label", "done")).issuperset(task):
