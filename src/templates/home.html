@@ -4,44 +4,7 @@
     <div class="container">
       <div class="row">
         <div class="col-12">
-          <h1>Exercise Assets</h1>
-          <hr/>
-          <p>  Resources for Teachers and Students using the <a href="https://4geeks.com/" target="_blank" >BreatheCode Platform.</a></p>
-          <p> Run this api on codespaces with <code> pipenv run start</code> </p>
-          <h4>importante Note:</h4>
-          <p>Some API methods are private and they will require the use of and access token in the URL query string like this:</p>
-          <blockquote>
-            <p>
-              METHOD: /path/to/resource/?access_token={your_access_token}
-            </p>
-          </blockquote>
-          <p>
-            The access token can be generated with this endpoint:
-          </p>
-          <pre>
-            <code>
-              POST: /apis/events/token/generate
-
-              PARAMS:
-                - client_id (string): your client id
-                - client_pass (string): your client password
-            </code>
-          </pre>
-          <p>
-            If you don't have a client_id or client_pass send us an email to request it.
-          </p>
-          <h2>Other Sample API's for Projects</h2>
-          <ul>
-            <li>
-              <a href="../apis/fake/todos/">TODO's API</a>
-            </li>
-            <li>
-              <a href="../apis/fake/contact/">Contact Management API</a>
-            </li>
-            <li>
-              <a href="../apis/fake/sound/">Sound API</a>
-            </li>
-          </ul>
+          {{content | safe}}
         </div>
       </div>
     </div>
