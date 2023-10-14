@@ -1,17 +1,21 @@
 import os, json
 from .models import Todo
 from flask import Blueprint, jsonify, request, render_template
+import markdown
 
 
 todo = Blueprint('todo', __name__)
 
 todo_path = os.path.join(os.path.dirname(__file__), 'todos.json')
+readme_path = os.path.join(os.path.dirname(__file__), 'README.md')
 
-
+print(os.path.dirname(__file__))
 @todo.route('/', methods=['GET'])
 def handle_index():
     if request.method == 'GET':
-        return render_template('todo.html')
+        readme_html = open(readme_path, 'r').read()
+        readme_html = markdown.markdown(readme_html)
+        return render_template('todo.html', content=readme_html)
 
 
 @todo.route('/user', methods=['GET'])
@@ -101,6 +105,33 @@ def create_user(username=None):
         return jsonify({"msg": "You must send an empty array in the body of the request"}), 400
 
 
+@todo.route('/user/task/<string:username>', methods=['POST'])
+def create_task(username=None):
+    if request.method == "POST":
+        if username is None:
+            return jsonify({"msg": "You must include a username in the URL of the request"}), 400
+        
+        users = Todo.get_all_users(todo_path)
+        if username not in users:
+            return jsonify({"msg": f"The user {username} doesn't exist"}), 404
+        else:
+            data = request.json
+            if type(data) != dict:
+                return jsonify({"msg": "You must send an object in the body of the request"}), 400
+            if set(("label", "done")).issuperset(data):
+                if type(data['label']) != str:
+                    return jsonify({"msg": "The label must be a string"}), 400
+                if type(data['done']) != bool:
+                    return jsonify({"msg": "The done must be a boolean"}), 400
+            else:
+                return jsonify({"msg": "You must send an object with the following properties: label and done"}), 400
+            
+            task = Todo.add_task(todo_path, username, data)
+            if task is None:
+                return jsonify({"msg": "Internal server error"}), 500
+            else:
+                return jsonify({"msg": f"The task {data['label']} has been created successfully"}), 201
+
 
 @todo.route('/user/<string:username>', methods=['DELETE'])
 def delete_task(username=None):
@@ -116,4 +147,3 @@ def delete_task(username=None):
             return jsonify({"msg": "Internal server error"}), 500
         return jsonify({"msg": f"The user {username} has been deleted successfully"}), 201
       
-    
