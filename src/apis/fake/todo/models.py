@@ -55,9 +55,9 @@ class Todo():
                         return todo.get('todo')
             return None
 
-    @classmethod
-    def update_all_todos_by_user(cls, todo_file_path, username=None, data=None):
-        todos_serialize = list(map(lambda todo: cls(**todo).serialize(), data))
+
+    def update_all_todos_by_user( todo_file_path, username=None, data=None):
+        todos_serialize = list(map(lambda todo: Todo(**todo).serialize(), data))
        
         with open(todo_file_path, 'r') as file:
             todos = json.load(file)
@@ -71,9 +71,9 @@ class Todo():
             file.close()
         return True
 
-    @classmethod
-    def create_user(cls, todo_file_path, username=None):
-        data = cls(**{"label": "example task", "done": False}).serialize()
+
+    def create_user(todo_file_path, username=None):
+        data = Todo(**{"label": "example task", "done": False}).serialize()
 
         with open(todo_file_path, 'r') as file:
             todos = json.load(file)
@@ -98,4 +98,16 @@ class Todo():
                         return True
             return None
 
-     
+
+    def add_task(todo_path, username=None, data=None):
+        data = Todo(**data).serialize()
+        with open(todo_path, 'r') as file:
+            todos = json.load(file)
+            for todo in todos:
+                if todo.get('username') == username:
+                    todo['todo'].append(data)
+                    with open(todo_path, 'w') as file:
+                        json.dump(todos, file, indent=2)
+                        file.close()
+                        return True
+            return None
