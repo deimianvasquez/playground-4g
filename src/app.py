@@ -6,13 +6,12 @@ import markdown
 
 
 
-from apis.fake.todo.routes import todo
-from apis.fake.contacts.routes import contact
-from apis.fake.sound.routes import sound
-from apis.kill_the_bug.routers import kill_the_bug
+from src.apis.fake.todo.routes import todo
+from src.apis.fake.contacts.routes import contact
+from src.apis.fake.sound.routes import sound
+from src.apis.kill_the_bug.routers import kill_the_bug
 
 app = Flask(__name__)
-CORS(app)
 bootstrap = Bootstrap(app)
 app.url_map.strict_slashes = False
 
@@ -20,6 +19,7 @@ app.register_blueprint(todo, url_prefix='/apis/fake/todos')
 app.register_blueprint(contact, url_prefix='/apis/fake/contact')
 app.register_blueprint(sound, url_prefix='/apis/fake/sound')
 app.register_blueprint(kill_the_bug, url_prefix='/apis/kill-the-bug')
+CORS(app)
 
 
 @app.route('/')
