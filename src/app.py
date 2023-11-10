@@ -23,7 +23,7 @@ app.register_blueprint(kill_the_bug, url_prefix='/apis/kill-the-bug')
 
 @app.route('/')
 def index():
-    readme_html = open('../README.md', 'r').read()
+    readme_html = open('./README.md', 'r').read()
     readme_html = markdown.markdown(readme_html)
     return render_template('home.html', content=readme_html)
 
