@@ -1,0 +1,76 @@
+<email-template>
+<header>
+<from>$school.registrationEmail</from>
+<reply-to>$replyToAddress</reply-to>
+<subject>Are you ready to complete your registration?</subject>
+</header>
+<body><![CDATA[
+<img src="cid:SchoolEmailLogo">
+
+<div style="font-family:arial; font-size:16pt">We're ready when you are!</div>
+
+Dear $student.firstName1,
+
+It looks like you did not complete the registration process.
+To reserve your seat in the class <a href="$shoppingCartLink">click here</a>.
+
+<strong>Course selection:</strong>
+#if (!$selectedBundles.isEmpty())Certificates
+#foreach($bundle in $selectedBundles)
+$stringTool.escapeHtml($bundle.displayCodeAndName)
+#end
+#end
+#if (!$selectedSections.isEmpty())Course Sections
+#foreach($section in $selectedSections)
+$section.publicCourseSectionNumber $stringTool.escapeHtml($section.sectionTitle)
+#end
+#end
+#if (!$selectedSpecialRequests.isEmpty())Special Requests
+#foreach($specialRequest in $selectedSpecialRequests)
+$stringTool.escapeHtml($specialRequest.description)
+#end
+#end
+
+If you need assistance on completing the transaction or need advice regarding our courses, please call us ($school.phoneArea) $school.phoneNumber or send us an <a href="mailto:$school.email">email</a>.
+
+Thank you for choosing Miami Dade College as your learning provider.
+
+$school.name
+School of Continuing Education and Professional Development
+$school.address1
+Email: <a href="mailto:$school.email">$school.email</a>
+Website: <a href="$school.publicWebsite">$school.publicWebsite</a>
+
+]]></body>
+<html-body><![CDATA[
+<html><body>
+#parse("ExternalHeader.vm")
+#parse("SchoolLogoShow.vm")
+<pre><div style="font-family:arial; font-size:12pt">
+<div style="font-family:arial; font-size:16pt">We're ready when you are!</div>
+Dear $student.firstName1,
+
+It looks like you did not complete the registration process.
+To reserve your seat in the class <a href="$shoppingCartLink">click here</a>.
+
+#if (!$selectedBundles.isEmpty())Certificates
+<ul>#foreach($bundle in $selectedBundles)<li>$stringTool.escapeHtml($bundle.displayCodeAndName)</li>#end</ul>#end
+#if (!$selectedSections.isEmpty())<strong>Course selection:</strong>
+<ul>#foreach($section in $selectedSections)<li>$section.publicCourseSectionNumber $stringTool.escapeHtml($section.sectionTitle)</li>#end</ul>#end
+#if (!$selectedSpecialRequests.isEmpty())Special Requests
+<ul>#foreach($specialRequest in $selectedSpecialRequests)<li>$stringTool.escapeHtml($specialRequest.description)</li>#end</ul>#end
+
+If you need assistance on completing the transaction or need advice regarding our courses, please call us ($school.phoneArea) $school.phoneNumber or send us an <a href="mailto:$school.email">email</a>.
+
+Thank you for choosing $school.name as your learning provider.
+
+$school.name
+School of Continuing Education and Professional Development
+Email: <a href="mailto:$school.name">$school.name</a>
+Website: <a href="$school.publicWebsite">$school.publicWebsite</a>
+</div></pre>
+#parse("ExternalFooter.vm")
+</body></html>
+]]></html-body>
+#parse("SchoolLogoDefinition.vm")
+</email-template>
